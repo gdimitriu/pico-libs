@@ -3,12 +3,14 @@
 #include "hardware/gpio.h"
 #include "ili934x.h"
 
+#define PIN_SCK  2
+#define PIN_MOSI 3
 #define PIN_MISO 4
-#define PIN_CS   5
-#define PIN_SCK  6
-#define PIN_MOSI 7
-#define PIN_DC   8
-#define PIN_RST  9
+//not used
+#define PIN_CS   8
+
+#define PIN_DC   7
+#define PIN_RST  5
 
 #define SPI_PORT spi0
 
@@ -34,16 +36,19 @@ int main()
     display = new ILI934X(SPI_PORT, PIN_CS, PIN_DC, PIN_RST);
     display->reset();
     display->init();
-
+	display->clear();
+	display->drawCircle(50, 50, 25, display->colour565(255,255,255));
+	
     while (1)
     {
         
-        if (lastTime1hz + 1000000000 < time_us_64())
+        if (lastTime1hz + 1000000 < time_us_64())
         {
             lastTime1hz = time_us_64();
             
             display->clear();
             display->drawCircle(50, 50, 25, display->colour565(255,0,0));
+			display->fillRect(100,200,150,220,display->colour565(255,255,255));
         }
         
     }
